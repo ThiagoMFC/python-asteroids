@@ -1,6 +1,6 @@
 import pygame
 from circle_shape import CircleShape
-from game_constants import PLAYER_RADIUS, LINE_WIDTH, PLAYER_TURN_SPEED, PLAYER_SPEED
+from game_constants import LINE_WIDTH
 
 
 class Asteroid(CircleShape):
