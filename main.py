@@ -14,7 +14,9 @@ def main():
     while True:
         log_state()
         for event in pygame.event.get():
-            pass
+            #user clicks X on game window
+            if event.type == pygame.QUIT:
+                return
         screen.fill("black")
         #refresh screen
         pygame.display.flip()
