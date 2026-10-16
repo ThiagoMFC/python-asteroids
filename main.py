@@ -13,6 +13,8 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
     dt = 0.0
+    #draw player in the middle of the screen
+    player = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
 
     while True:
         log_state()
@@ -21,8 +23,8 @@ def main():
             if event.type == pygame.QUIT:
                 return
         screen.fill("black")
-        #draw player in the middle of the screen
-        player = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
+        #update player position
+        player.update(dt)
         player.draw(screen)
         #refresh screen
         pygame.display.flip()
