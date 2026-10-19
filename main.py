@@ -52,8 +52,8 @@ def main():
         for obj in asteroids:
             if obj.collides_with(player):
                 log_event("player_hit")
-                print("game over: score", player.score)
-                sys.exit()
+                player.lives -= 1
+                obj.kill()
             for bullet in shots:
                 if obj.collides_with(bullet):
                     log_event("asteroid_shot")
@@ -74,6 +74,10 @@ def main():
 
         #time passed since last call
         dt = clock.tick(60)/1000
+
+        if player.lives == 0:
+            print("game over: score", player.score)
+            sys.exit()
         
 
 main()

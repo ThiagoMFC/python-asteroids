@@ -12,6 +12,7 @@ class Player(CircleShape):
         self.bomb_cooldown = 0
         self.bomb_count = 5
         self.score = 0
+        self.lives = 2
 
     def triangle(self) -> list[pygame.Vector2]:
         forward = pygame.Vector2(0, 1).rotate(self.rotation)

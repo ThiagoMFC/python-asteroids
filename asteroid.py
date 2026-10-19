@@ -21,6 +21,7 @@ class Asteroid(CircleShape):
             return
 
         log_event("asteroid_split")
+        #if asteroid bigger than ASTEROID_MIN_RADIUS split into 2 smaller ones
         #generate a random angle between 20 and 50 degrees
         angle = random.uniform(20, 50)
         velocity1 = self.velocity.rotate(angle)
