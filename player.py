@@ -88,7 +88,7 @@ class Player(CircleShape):
             shield = PlayerShield(self)
         else:
             #re-initialize field shield spawn (killed in main.py when user collides with it for shield_up)
-            shield = Shield(0,0)
+            shield = Shield(-100,-100)
 
 
     def increase_score(self, amount):

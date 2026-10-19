@@ -40,7 +40,7 @@ def main():
     #create asteroid field
     asteroid_field = AsteroidField()
     #initialize shield spawn
-    shield = Shield(0, 0)
+    shield = Shield(-100, -100)
 
 
     while True:
