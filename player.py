@@ -3,6 +3,7 @@ from circle_shape import CircleShape
 from game_constants import PLAYER_RADIUS, LINE_WIDTH, PLAYER_TURN_SPEED, PLAYER_SPEED, PLAYER_SHOOT_SPEED, PLAYER_SHOOT_COOLDOWN_SECONDS, PLAYER_BOMB_COOLDOWN_SECONDS
 from shot import Shot
 from bomb import Bomb
+from shield import Shield, PlayerShield
 
 class Player(CircleShape):
     def __init__(self, x: int, y: int) -> None:
@@ -13,6 +14,7 @@ class Player(CircleShape):
         self.bomb_count = 5
         self.score = 0
         self.lives = 2
+        self.shields = 0
 
     def triangle(self) -> list[pygame.Vector2]:
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
@@ -75,6 +77,15 @@ class Player(CircleShape):
                 self.bomb_count -= 1
         else:
             return
+
+    def shield_up(self):
+        self.shields = 3
+        shield = PlayerShield(self)
+
+    def shield_down(self):
+        self.shields -= 1
+        if self.shields > 0:
+            shield = PlayerShield(self)
 
 
     def increase_score(self, amount):

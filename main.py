@@ -6,6 +6,7 @@ from asteroid import Asteroid
 from asteroid_field import AsteroidField
 from shot import Shot
 from bomb import Bomb
+from shield import Shield, PlayerShield
 import sys
 
  
@@ -24,16 +25,22 @@ def main():
     asteroids = pygame.sprite.Group()
     shots = pygame.sprite.Group()
     bombs = pygame.sprite.Group()
+    shields = pygame.sprite.Group()
+    player_shields = pygame.sprite.Group()
     Player.containers = (updatable, drawable)
     Asteroid.containers = (asteroids, updatable, drawable)
     AsteroidField.containers = (updatable)
     Shot.containers = (shots, updatable, drawable)
-    Bomb.containers = (bombs, updatable, drawable)
+    Bomb.containers = (bombs, drawable)
+    Shield.containers = (shields, updatable, drawable)
+    PlayerShield.containers = (player_shields, updatable, drawable)
 
     #draw player in the middle of the screen
     player = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
     #create asteroid field
     asteroid_field = AsteroidField()
+    #initialize shield spawn
+    shield = Shield(0, 0)
 
 
     while True:
@@ -64,6 +71,18 @@ def main():
                     log_event("asteroid_bombed")
                     obj.split(player)
                     bomb.kill()
+            for shield in player_shields:
+                if obj.collides_with(shield):
+                    log_event("shield_hit")
+                    shield.kill()
+                    player.shield_down()
+                    obj.split(player)
+
+        for obj in shields:
+            if obj.collides_with(player):
+                log_event("shield_up")
+                player.shield_up()
+                obj.kill()
 
         #draw objects to screen
         for obj in drawable:
@@ -76,7 +95,7 @@ def main():
         dt = clock.tick(60)/1000
 
         if player.lives == 0:
-            print("game over: score", player.score)
+            print("Game Over. Score:", player.score)
             sys.exit()
         
 
