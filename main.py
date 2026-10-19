@@ -71,10 +71,10 @@ def main():
                     log_event("asteroid_bombed")
                     obj.split(player)
                     bomb.kill()
-            for shield in player_shields:
-                if obj.collides_with(shield):
+            for shield_obj in player_shields:
+                if obj.collides_with(shield_obj):
                     log_event("shield_hit")
-                    shield.kill()
+                    shield_obj.kill()
                     player.shield_down()
                     obj.split(player)
 
