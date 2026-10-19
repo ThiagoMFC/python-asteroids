@@ -11,6 +11,7 @@ class Player(CircleShape):
         self.shot_cooldown = 0
         self.bomb_cooldown = 0
         self.bomb_count = 5
+        self.score = 0
 
     def triangle(self) -> list[pygame.Vector2]:
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
@@ -70,5 +71,10 @@ class Player(CircleShape):
             else:
                 self.bomb_cooldown = PLAYER_BOMB_COOLDOWN_SECONDS
                 bomb = Bomb(self.position[0], self.position[1])
+                self.bomb_count -= 1
         else:
             return
+
+
+    def increase_score(self, amount):
+        self.score += amount

@@ -52,17 +52,17 @@ def main():
         for obj in asteroids:
             if obj.collides_with(player):
                 log_event("player_hit")
-                print("game over")
+                print("game over: score", player.score)
                 sys.exit()
             for bullet in shots:
                 if obj.collides_with(bullet):
                     log_event("asteroid_shot")
-                    obj.split()
+                    obj.split(player)
                     bullet.kill()
             for bomb in bombs:
                 if obj.collides_with(bomb):
                     log_event("asteroid_bombed")
-                    obj.split()
+                    obj.split(player)
                     bomb.kill()
 
         #draw objects to screen
