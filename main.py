@@ -59,6 +59,11 @@ def main():
                     log_event("asteroid_shot")
                     obj.split()
                     bullet.kill()
+            for bomb in bombs:
+                if obj.collides_with(bomb):
+                    log_event("asteroid_bombed")
+                    obj.split()
+                    bomb.kill()
 
         #draw objects to screen
         for obj in drawable:

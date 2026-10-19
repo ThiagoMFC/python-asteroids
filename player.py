@@ -1,6 +1,6 @@
 import pygame
 from circle_shape import CircleShape
-from game_constants import PLAYER_RADIUS, LINE_WIDTH, PLAYER_TURN_SPEED, PLAYER_SPEED, PLAYER_SHOOT_SPEED, PLAYER_SHOOT_COOLDOWN_SECONDS
+from game_constants import PLAYER_RADIUS, LINE_WIDTH, PLAYER_TURN_SPEED, PLAYER_SPEED, PLAYER_SHOOT_SPEED, PLAYER_SHOOT_COOLDOWN_SECONDS, PLAYER_BOMB_COOLDOWN_SECONDS
 from shot import Shot
 from bomb import Bomb
 
@@ -8,7 +8,8 @@ class Player(CircleShape):
     def __init__(self, x: int, y: int) -> None:
         super().__init__(x, y, PLAYER_RADIUS)
         self.rotation = 0
-        self.cooldown = 0
+        self.shot_cooldown = 0
+        self.bomb_cooldown = 0
         self.bomb_count = 5
 
     def triangle(self) -> list[pygame.Vector2]:
@@ -28,7 +29,8 @@ class Player(CircleShape):
     def update(self, dt: float) -> None:
         keys = pygame.key.get_pressed()
 
-        self.cooldown = self.cooldown - dt
+        self.shot_cooldown = self.shot_cooldown - dt
+        self.bomb_cooldown = self.bomb_cooldown - dt
 
         if keys[pygame.K_a]:
             self.rotate(-dt)
@@ -51,10 +53,10 @@ class Player(CircleShape):
 
     def shoot(self):
         #print(self.position[0])
-        if self.cooldown > 0:
+        if self.shot_cooldown > 0:
             return
         else:
-            self.cooldown = PLAYER_SHOOT_COOLDOWN_SECONDS    
+            self.shot_cooldown = PLAYER_SHOOT_COOLDOWN_SECONDS    
             shot = Shot(self.position[0], self.position[1])
             shot_vector = pygame.Vector2(0, 1)
             rotated_shot = shot_vector.rotate(self.rotation)
@@ -63,6 +65,10 @@ class Player(CircleShape):
 
     def bomb(self):
         if self.bomb_count > 0:
-            bomb = Bomb(self.position[0], self.position[1])
+            if self.bomb_cooldown > 0:
+                return
+            else:
+                self.bomb_cooldown = PLAYER_BOMB_COOLDOWN_SECONDS
+                bomb = Bomb(self.position[0], self.position[1])
         else:
             return
