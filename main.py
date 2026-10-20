@@ -60,6 +60,7 @@ def main():
             if obj.collides_with(player):
                 log_event("player_hit")
                 player.lives -= 1
+                print(f"player.lives {player.lives}")
                 obj.kill()
             for bullet in shots:
                 if obj.collides_with(bullet):
@@ -76,12 +77,14 @@ def main():
                     log_event("shield_hit")
                     shield_obj.kill()
                     player.shield_down()
+                    print(f"player.shields {player.shields}")
                     obj.split(player)
 
         for obj in shields:
             if obj.collides_with(player):
                 log_event("shield_up")
                 player.shield_up()
+                print(f"player.shields {player.shields}")
                 obj.kill()
 
         #draw objects to screen

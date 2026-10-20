@@ -1,6 +1,6 @@
 import pygame
 from circle_shape import CircleShape
-from game_constants import PLAYER_RADIUS, LINE_WIDTH, PLAYER_TURN_SPEED, PLAYER_SPEED, PLAYER_SHOOT_SPEED, PLAYER_SHOOT_COOLDOWN_SECONDS, PLAYER_BOMB_COOLDOWN_SECONDS
+from game_constants import PLAYER_RADIUS, LINE_WIDTH, PLAYER_TURN_SPEED, PLAYER_SPEED, PLAYER_SHOOT_SPEED, PLAYER_SHOOT_COOLDOWN_SECONDS, PLAYER_BOMB_COOLDOWN_SECONDS, SCREEN_HEIGHT, SCREEN_WIDTH
 from shot import Shot
 from bomb import Bomb
 from shield import Shield, PlayerShield
@@ -48,6 +48,18 @@ class Player(CircleShape):
             self.shoot()
         if keys[pygame.K_b]:
             self.bomb()
+
+        #left and right edge wrapping
+        if self.position.x < 0:
+            self.position.x = SCREEN_WIDTH
+        elif self.position.x > SCREEN_WIDTH:
+            self.position.x = 0
+
+        #top and bottom edge wrapping
+        if self.position.y < 0:
+            self.position.y = SCREEN_HEIGHT
+        elif self.position.y > SCREEN_HEIGHT:
+            self.position.y = 0
 
     def move(self, dt: float):
         unit_vector = pygame.Vector2(0, 1)
