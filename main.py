@@ -16,9 +16,11 @@ def main():
     print(f"SCREEN_HEIGHT : {SCREEN_HEIGHT}")
 
     pygame.init()
+    pygame.font.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
     dt = 0.0
+    game_font = pygame.font.Font(None, 30)
 
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
@@ -51,6 +53,29 @@ def main():
                 return
             
         screen.fill("black")
+
+        shield_text = f"Shield strenght: {player.shields}"
+        lives_text = f"Lives: {player.lives}"
+        score_text = f"Score: {player.score}"
+        bomb_text = f"Bombs: {player.bomb_count}"
+        #shoot_coldown_text = f"Gun cooldown: {player.shot_cooldown}"
+        #bomb_sooldown_text = f"Bomb cooldown: {player.bomb_cooldown}"
+
+        shield_text_surface = game_font.render(shield_text, True, "white")
+        lives_text_surface = game_font.render(lives_text, True, "white")
+        score_text_surface = game_font.render(score_text, True, "white")
+        bomb_text_surface = game_font.render(bomb_text, True, "white")
+        #shoot_coldown_text_surface = game_font.render(shoot_coldown_text, True, "white")
+        #bomb_sooldown_text_surface = game_font.render(bomb_sooldown_text, True, "white")
+
+        screen.blit(shield_text_surface, (20, 20))
+        #screen.blit(shoot_coldown_text_surface, (20, 40))
+        screen.blit(bomb_text_surface, (20, 40))
+        #screen.blit(bomb_sooldown_text_surface, (20, 80))
+
+        screen.blit(score_text_surface, (SCREEN_WIDTH - (game_font.size(score_text)[0]+20), 20))
+        screen.blit(lives_text_surface, (SCREEN_WIDTH - (game_font.size(lives_text)[0]+20), 40))
+        
 
         #update player position
         updatable.update(dt)
