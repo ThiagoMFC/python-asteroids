@@ -13,7 +13,7 @@ class Shield(CircleShape):
         pygame.draw.circle(screen, "cyan", self.position, self.radius, LINE_WIDTH)
 
     def spawn(self, radius: float, position: pygame.Vector2) -> None:
-            shield = Shield(position.x, position.y)
+        shield = Shield(position.x, position.y)
 
     def update(self, dt: float) -> None:
         self.spawn_timer += dt

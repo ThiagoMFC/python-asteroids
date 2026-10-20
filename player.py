@@ -2,7 +2,7 @@ import pygame
 from circle_shape import CircleShape
 from game_constants import PLAYER_RADIUS, LINE_WIDTH, PLAYER_TURN_SPEED, PLAYER_SPEED, PLAYER_SHOOT_SPEED, PLAYER_SHOOT_COOLDOWN_SECONDS, PLAYER_BOMB_COOLDOWN_SECONDS, SCREEN_HEIGHT, SCREEN_WIDTH
 from shot import Shot
-from bomb import Bomb
+from bomb import PlayerBomb, Bomb
 from shield import Shield, PlayerShield
 
 class Player(CircleShape):
@@ -15,6 +15,7 @@ class Player(CircleShape):
         self.score = 0
         self.lives = 2
         self.shields = 0
+        self.bomb_spawn = False
 
     def triangle(self) -> list[pygame.Vector2]:
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
@@ -85,10 +86,15 @@ class Player(CircleShape):
                 return
             else:
                 self.bomb_cooldown = PLAYER_BOMB_COOLDOWN_SECONDS
-                bomb = Bomb(self.position[0], self.position[1])
+                bomb = PlayerBomb(self.position[0], self.position[1])
                 self.bomb_count -= 1
+                self.bomb_spawn = True
         else:
-            return
+            #re-initialize field bomb spawn (killed when user collides with it for bomb_up)
+            if self.bomb_spawn == True:
+                bomb = Bomb(-100, -100)
+                self.bomb_spawn = False
+
 
     def shield_up(self):
         self.shields = 3
@@ -101,6 +107,10 @@ class Player(CircleShape):
         else:
             #re-initialize field shield spawn (killed in main.py when user collides with it for shield_up)
             shield = Shield(-100,-100)
+            
+
+    def bomb_up(self):
+        self.bomb_count += 2
 
 
     def increase_score(self, amount):

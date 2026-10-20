@@ -5,7 +5,7 @@ from player import Player
 from asteroid import Asteroid
 from asteroid_field import AsteroidField
 from shot import Shot
-from bomb import Bomb
+from bomb import PlayerBomb, Bomb
 from shield import Shield, PlayerShield
 import sys
 
@@ -26,6 +26,7 @@ def main():
     drawable = pygame.sprite.Group()
     asteroids = pygame.sprite.Group()
     shots = pygame.sprite.Group()
+    player_bombs = pygame.sprite.Group()
     bombs = pygame.sprite.Group()
     shields = pygame.sprite.Group()
     player_shields = pygame.sprite.Group()
@@ -33,7 +34,8 @@ def main():
     Asteroid.containers = (asteroids, updatable, drawable)
     AsteroidField.containers = (updatable)
     Shot.containers = (shots, updatable, drawable)
-    Bomb.containers = (bombs, drawable)
+    PlayerBomb.containers = (player_bombs, drawable)
+    Bomb.containers = (bombs, drawable, updatable)
     Shield.containers = (shields, updatable, drawable)
     PlayerShield.containers = (player_shields, updatable, drawable)
 
@@ -43,6 +45,8 @@ def main():
     asteroid_field = AsteroidField()
     #initialize shield spawn
     shield = Shield(-100, -100)
+    #initialize bomb spawn
+    bomb = Bomb(-100, -100)
 
 
     while True:
@@ -85,31 +89,34 @@ def main():
             if obj.collides_with(player):
                 log_event("player_hit")
                 player.lives -= 1
-                print(f"player.lives {player.lives}")
                 obj.kill()
             for bullet in shots:
                 if obj.collides_with(bullet):
                     log_event("asteroid_shot")
                     obj.split(player)
                     bullet.kill()
-            for bomb in bombs:
-                if obj.collides_with(bomb):
+            for player_bomb in player_bombs:
+                if obj.collides_with(player_bomb):
                     log_event("asteroid_bombed")
                     obj.split(player)
-                    bomb.kill()
+                    player_bomb.kill()
             for shield_obj in player_shields:
                 if obj.collides_with(shield_obj):
                     log_event("shield_hit")
                     shield_obj.kill()
                     player.shield_down()
-                    print(f"player.shields {player.shields}")
                     obj.split(player)
 
         for obj in shields:
             if obj.collides_with(player):
                 log_event("shield_up")
                 player.shield_up()
-                print(f"player.shields {player.shields}")
+                obj.kill()
+
+        for obj in bombs:
+            if obj.collides_with(player):
+                log_event("bomb_up")
+                player.bomb_up()
                 obj.kill()
 
         #draw objects to screen
@@ -122,7 +129,7 @@ def main():
         #time passed since last call
         dt = clock.tick(60)/1000
 
-        if player.lives == 0:
+        if player.lives <= 0:
             print("Game Over. Score:", player.score)
             sys.exit()
         
